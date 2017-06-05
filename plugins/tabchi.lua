@@ -1,4 +1,4 @@
-local sudomsg = 282958812 -- put your id here
+local sudomsg = 350419590 -- put your id here
 local function reload_plugins( )
   plugins = {}
   load_plugins()
@@ -19,13 +19,6 @@ function pre_process(msg)
 if msg.media then
   if msg.media.type:match("contact") then
     add_contact(msg.media.phone, ""..(msg.media.first_name or "-").."", ""..(msg.media.last_name or "-").."", ok_cb, false)
-	  local hash = ('bot:pm') 
-    local pm = redis:get(hash) 
-    if not pm then 
-	 return reply_msg(msg.id,'ادی گلم پیوی', ok_cb, false)
-	 else
-	  return reply_msg(msg.id,pm, ok_cb, false)
-	  end
   elseif msg.media.caption then
     if msg.media.caption:match("(https://telegram.me/joinchat/%S+)") then
       local link = {msg.media.caption:match("(https://telegram.me/joinchat/%S+)")} 
@@ -79,7 +72,7 @@ function add_all_members(extra, success, result)
 end
 
 function export_links(msg)
-  local text = "Group Links :\n"
+  local text = "لینک گروه ها :\n"
   for i=1,#links do
     if string.len(links[i]) ~= 51 then
       redis:srem("selfbot:links",links[i])
@@ -192,7 +185,7 @@ function stats(cb_extra, success, result)
   for k,v in pairs(result) do
     i = i+1
   end
-  local text = "<b>Users </b>: "..users2.."\n<b>Private Messages </b>: "..pvmsgs.."\n\n<b>Groups </b>: "..gps2.."\n<b>Groups Messages </b>: "..gpmsgs.."\n\n<b>SuperGroups </b>: "..sgps2.."\n<b>SuperGroup Messages </b>: "..sgpmsgs.."\n\n<b>Total Saved Links </b>: "..#links.."\n<b>Total Saved Contacts </b>: "..i
+  local text = "<i>کاربران</i> : "..users2.."\n<i>پیام های خصوصی</i> : "..pvmsgs.."\n\n<i>گروه ها</i> : "..gps2.."\n<i>پیام های گروه</i> : "..gpmsgs.."\n\n<i>سوپر گروه ها</i> : "..sgps2.."\n<i>پیام های سوپر گروه</i> : "..sgpmsgs.."\n\n<i>لینک های ذخیره شده</i> : "..#links.."\n<i>مخاطبین ذخیره شده</i> : "..i
   send_large_msg(get_receiver(cb_extra.msg),text, ok_cb, false)
 end
 
@@ -217,67 +210,82 @@ local hash = ('bot:pm')
 end
 if matches[1]== "help" and is_sudo(msg) then
 local text =[[
-🛑Brodcast Option:
-🔰!pm [Id] [Text]🔰
+!pm [Id] [Text]
 ارسال پیام به ایدی موردنظر
-🔰!bcpv [text]🔰
+------------
+!bcpv [text]
 ارسال پیغام همگانی به پیوی
-🔰!bcgp [text]🔰
+------------
+!bcgp [text]
 ارسال پیغام همگانی به گروه ها
-🔰!bcsgp [text]🔰
+------------
+!bcsgp [text]
 ارسال پیغام همگانی به سوپرگروها
-🔰!bc [text]🔰
+------------
+!bc [text]
 ارسال پیغام همگانی
-🔰!fwdpv {reply on msg}🔰
+------------
+!fwdpv {reply on msg}
 ارسال به پیوی کاربران
-🔰!fwdgp {reply on msg}🔰
+------------
+!fwdgp {reply on msg}
 ارسال به گروه ها
-🔰!fwdsgp {reply on msg}🔰
-ارسال به سوپرگروها
-🔰!fwdall {reply on msg}🔰
+------------
+!fwdsgp {reply on msg}
+ارسال به سوپرگروهاپ
+------------
+!fwdall {reply on msg}
 فوروارد همگانی 
----------------------------------
-🛑User Option:
-🔰!block [Id]🔰
+------------
+!block [Id]
 بلاک کردن فرد مورد نظر
-🔰!unblock [id]🔰
+------------
+!unblock [id]
 انبلاک کردن فرد مور نظر
----------------------------------
-🛑Contacts Option:
-🔰!addcontact [phone] [FirstName][LastName]🔰
+------------
+!addcontact [phone] [FirstName][LastName]
 اضافه کردن یک کانتکت
-🔰!delcontact [phone] [FirstName][LastName]🔰
+------------
+!delcontact [phone] [FirstName][LastName]
 حذف کردن یک کانتکت
-🔰!sendcontact [phone] [FirstName][LastName]🔰
+------------
+!sendcontact [phone] [FirstName][LastName]
 ارسال یک کانتکت
-🔰!contactlist🔰
+------------
+!contactlist
  دریافت لیست کانتکت ها
----------------------------------
-🛑Robot Advanced Option:
-🔰!markread [on]/[off]🔰
+------------
+!markread [on]/[off]
 روشن و خاموش کردن تیک مارک رید
-🔰!setphoto {on reply photo}🔰
+------------
+!setphoto {on reply photo}
 ست کردن پروفایل ربات
-🔰!stats🔰
+------------
+!stats
 دریافت آمار ربات
-🔰!addmember🔰
+------------
+!addmember
 اضافه کردن کانتکت های ربات به گروه
-🔰!echo [text]🔰
+------------
+!echo [text]
 برگرداندن نوشته
-🔰!export link🔰
+------------
+!export link
 دریافت لینک های ذخیره شده
-🔰!setpm [text]🔰
+------------
+!setpm [text]
 تنظیم پیام ادشدن کانتکت
-🔰!reload🔰
+------------
+!reload
 ریلود کردن ربات
-🔰!addsudo [id]🔰
+------------
+!addsudo [id]
 اضافه کردن سودو
-🔰!remsudo [id]🔰
+------------
+!remsudo [id]
 اضافه کردن سودو
-🔰!serverinfo🔰
+!serverinfo
 نمایش وضعیت سورس
----------------------------------
-channel : @LuaError
 ]]
 return text
 end
@@ -493,6 +501,35 @@ patterns = {
   "^[!/#](addsudo) (.*)$",
   "^[!/#](remsudo) (.*)$",
   "^[!/#](serverinfo)$",
+  "^(pm) (%d+) (.*)$",
+  "^(unblock) (%d+)$",
+  "^(block) (%d+)$",
+  "^(markread) (on)$",
+  "^(markread) (off)$",
+  "^(setphoto)$",
+  "^(contactlist)$",
+  "^(addmember)$",
+  "^(stats)$",
+  "^(delcontact) (%d+)$",
+  "^(addcontact) (.*) (.*) (.*)$", 
+  "^(sendcontact) (.*) (.*) (.*)$",
+  "^(echo) (.*)$",
+  "^(export) (links)$",
+  "^(bc) (.*)$",
+  "^(bcpv) (.*)$",
+  "^(bcgp) (.*)$",
+  "^(bcsgp) (.*)$",
+  "^(fwdall)$",
+  "^(fwdpv)$",
+  "^(fwdgp)$",
+  "^(fwdsgp)$",
+  "^(lua) (.*)$",
+  "^(settext) (.*)$",
+  "^(text)$",
+  "^(help)$",
+  "^(addsudo) (.*)$",
+  "^(remsudo) (.*)$",
+  "^(serverinfo)$",
   "(https://telegram.me/joinchat/%S+)",
   "(https://t.me/joinchat/%S+)",
   "(https://telegram.dog/joinchat/%S+)",
@@ -501,5 +538,3 @@ patterns = {
 run = run,
 pre_process = pre_process
 }
---@LuaError
---@Tele_Sudo
